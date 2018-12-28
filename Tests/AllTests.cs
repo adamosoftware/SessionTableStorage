@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests.Models;
 
@@ -66,6 +67,16 @@ namespace Tests
 		{
 			var defaultVal = _session.GetAsync("MissingValue", "dog").Result;
 			Assert.AreEqual(defaultVal, "dog");
+		}
+
+		[TestMethod]
+		public void ClearShouldLeaveNothing()
+		{
+			// need some sample value just to make sure there's something to clear
+			_session.SetAsync("value", "whatever").Wait();
+			_session.SetAsync("date", DateTime.Now).Wait();
+			_session.ClearAsync().Wait();
+			Assert.IsTrue(!_session.GetAllEntitiesAsync().Result.Any());
 		}
 	}
 }
