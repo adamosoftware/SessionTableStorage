@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheableStorageBase.cs" />
+    <Compile Include="Interfaces\ITimedCacheable.cs" />
     <Compile Include="SessionStorageBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageEntity.cs" />
