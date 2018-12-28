@@ -8,7 +8,7 @@ The reason I didn't go for Cosmos DB is because I'm cost-conscious, and I wanted
 
 ## Quickstart
 
-- Create a class based on [SessionStorageBase](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs), and implement the `GetTable` method. See [this example](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/MySession.cs) from the Tests project.
+- Create a class based on [SessionStorageBase](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs), and implement the `GetTable` method. See [this example](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/MySession.cs) from the Tests project. I like using an abstract base class so I don't have to make any assumptions about how a storage account is accessed.
 
 - Instantiate your `SessionStorageBase`-based class, passing a partition key that makes sense in your application. This could be a user name, ASP.NET SessionId or whatever makes sense in your application.
 
