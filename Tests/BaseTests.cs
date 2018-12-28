@@ -6,7 +6,7 @@ using Tests.Models;
 namespace Tests
 {
 	[TestClass]
-	public class AllTests
+	public class BaseTests
 	{
 		private MySession _session = new MySession("sampleUser");
 

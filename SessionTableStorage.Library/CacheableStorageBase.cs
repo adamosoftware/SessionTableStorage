@@ -40,7 +40,7 @@ namespace SessionTableStorage.Library
 		public async Task SetAsync<T>(string rowKey, T data) where T : ITimedCacheable
 		{
 			data.LastUpdate = DateTime.UtcNow;
-			await SetAsync(rowKey, data);
+			await base.SetAsync(rowKey, data);
 		}
 	}
 }
