@@ -15,7 +15,7 @@ namespace SessionTableStorage.Library
 
 		public new async Task<T> GetAsync<T>(string rowKey, T defaultValue = default(T))
 		{
-			throw new NotImplementedException("To guarantee data freshness, please use the overload that accepts a Func<Task<T>>");
+			throw new InvalidOperationException("To guarantee data freshness, please use the overload that accepts a Func<Task<T>>");
 		}
 
 		public async Task<T> GetAsync<T>(string rowKey, Func<Task<T>> update) where T : ITimedCacheable
