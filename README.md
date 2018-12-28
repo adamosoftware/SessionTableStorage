@@ -20,7 +20,7 @@ The reason I didn't go for Cosmos DB is because I'm cost-conscious, and I wanted
 
 - Use the [ClearAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L56) method to delete all the values within a partition key. This is effectively the same as abandoning a session in ASP.NET.
 
-- Check out the [integration tests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/AllTests.cs) to see common usage examples.
+- Check out the [integration tests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/BaseTests.cs) to see common usage examples.
 
 ## CacheableStorageBase
 
