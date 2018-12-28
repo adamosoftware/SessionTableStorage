@@ -46,5 +46,26 @@ namespace Tests
 
 			Assert.AreEqual(sample, getSample);
 		}
+
+		[TestMethod]
+		public void MissingValueShouldFail()
+		{
+			try
+			{
+				var missing = _session.GetAsync<string>("MissingValue").Result;
+				Assert.Fail("Should not reach this");
+			}
+			catch 
+			{
+				// success
+			}
+		}
+
+		[TestMethod]
+		public void DefaultValueShouldWork()
+		{
+			var defaultVal = _session.GetAsync("MissingValue", "dog").Result;
+			Assert.AreEqual(defaultVal, "dog");
+		}
 	}
 }

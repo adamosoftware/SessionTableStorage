@@ -3,7 +3,10 @@ using Newtonsoft.Json;
 
 namespace SessionTableStorage.Library
 {
-	public class StorageEntity : TableEntity
+	/// <summary>
+	/// Used internally to mediate between the end-user's data and the backing table storage object
+	/// </summary>
+	internal class StorageEntity : TableEntity
 	{
 		public StorageEntity()
 		{
