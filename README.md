@@ -21,3 +21,11 @@ The reason I didn't go for Cosmos DB is because I'm cost-conscious, and I wanted
 - Use the [ClearAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L56) method to delete all the values within a partition key. This is effectively the same as abandoning a session in ASP.NET.
 
 - Check out the [integration tests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/AllTests.cs) to see common usage examples.
+
+## CacheableStorageBase
+
+A requirement I have in another project turned out to be decent fit for this project. On my personal site [aosoftware.net](https://aosoftware.net/), I use GitHub's API to fill the "What I'm Working On" section -- it shows a summary of my activity over the last several days. GitHub API calls are limited to a certain maximum per hour or something. I don't remember what the limit is, but I don't want to hit that limit by calling their API with every page view of my site. Not that I get a lot of traffic in the first place, but I felt this was a good candidate for caching API call results for 15 minutes at a time. That way, no matter how often my home page is refreshed, it will call the GitHub API once every 15 minutes at most.
+
+To do this, I added [CacheableStorageBase](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/CacheableStorageBase.cs) and a related interface [ITimedCacheable](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/Interfaces/ITimedCacheable.cs). Have a look at a different [GetAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/CacheableStorageBase.cs#L21) method that retrieves an entity from storage, and automatically updates it if it's stale.
+
+To see this in use, check out [CacheableTests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/CacheableTests.cs) and the model class [GitHubActivityView](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/Models/GithubActivityView.cs).
