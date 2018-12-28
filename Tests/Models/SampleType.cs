@@ -48,7 +48,7 @@ namespace Tests.Models
 				return
 					test.ItemName.Equals(ItemName) &&
 					test.Quantity.Equals(Quantity) &&
-					test.UnitPrice.Equals(UnitPrice);					
+					test.UnitPrice.Equals(UnitPrice);
 			}
 
 			return false;

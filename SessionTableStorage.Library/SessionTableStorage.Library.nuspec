@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SessionTableStorage.Library</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/adamosoftware/SessionTableStorage/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/adamosoftware/SessionTableStorage</projectUrl>    
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>    
+    <copyright>Copyright (c) Adam O'Neil 2018</copyright>
+    <tags>azure-table-storage</tags>
+  </metadata>
+</package>

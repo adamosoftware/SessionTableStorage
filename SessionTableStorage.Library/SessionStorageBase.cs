@@ -1,6 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -42,9 +41,9 @@ namespace SessionTableStorage.Library
 		{
 			try
 			{
-				var result = await QueryTableAsync(rowKey);				
+				var result = await QueryTableAsync(rowKey);
 				string json = ((StorageEntity)result.Result).Json;
-				return JsonConvert.DeserializeObject<T>(json);				
+				return JsonConvert.DeserializeObject<T>(json);
 			}
 			catch
 			{
@@ -74,7 +73,7 @@ namespace SessionTableStorage.Library
 		{
 			List<StorageEntity> result = new List<StorageEntity>();
 
-			// thanks to https://stackoverflow.com/a/48227035/2023653			
+			// thanks to https://stackoverflow.com/a/48227035/2023653
 			var criteria = TableQuery.GenerateFilterCondition(nameof(StorageEntity.PartitionKey), QueryComparisons.Equal, _partitionKey);
 			var query = new TableQuery<StorageEntity>().Where(criteria);
 			TableContinuationToken continuationToken = null;

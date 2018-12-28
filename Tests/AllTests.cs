@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests.Models;
 
 namespace Tests
@@ -56,7 +56,7 @@ namespace Tests
 				var missing = _session.GetAsync<string>("MissingValue").Result;
 				Assert.Fail("Should not reach this");
 			}
-			catch 
+			catch
 			{
 				// success
 			}
