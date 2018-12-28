@@ -67,6 +67,7 @@
     <Reference Include="System.Security" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\SampleType.cs" />
     <Compile Include="MySession.cs" />
     <Compile Include="AllTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
