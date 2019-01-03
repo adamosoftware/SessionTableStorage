@@ -9,6 +9,12 @@ namespace SessionTableStorage.Library
 	{
 		protected abstract CloudTable GetTable();
 
+		/// <summary>
+		/// Set this to true in your derived class to
+		/// prevent exception from being thrown if entries don't exist
+		/// </summary>
+		protected abstract bool ReturnNullIfNotExists { get; }
+
 		private readonly string _partitionKey;
 
 		public SessionStorageBase(string partitionKey)
@@ -16,10 +22,25 @@ namespace SessionTableStorage.Library
 			_partitionKey = partitionKey;
 		}
 
+		private TableOperation GetInsertOrReplaceOperation(string rowKey, object data)
+		{
+			return TableOperation.InsertOrReplace(new StorageEntity(_partitionKey, rowKey, data));
+		}
+
+		private TableOperation GetQueryOperation(string rowKey)
+		{
+			return TableOperation.Retrieve<StorageEntity>(_partitionKey, rowKey);
+		}
+
+		#region async
+
+		/// <summary>
+		/// Inserts/replaces the rowKey data
+		/// </summary>
 		public async Task SetAsync(string rowKey, object data)
 		{
+			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data);
 			var table = GetTable();
-			var insertOrReplace = TableOperation.InsertOrReplace(new StorageEntity(_partitionKey, rowKey, data));
 			await table.ExecuteAsync(insertOrReplace);
 		}
 
@@ -28,8 +49,8 @@ namespace SessionTableStorage.Library
 		/// </summary>
 		public async Task<TableResult> QueryTableAsync(string rowKey)
 		{
+			TableOperation query = GetQueryOperation(rowKey);
 			var table = GetTable();
-			var query = TableOperation.Retrieve<StorageEntity>(_partitionKey, rowKey);
 			return await table.ExecuteAsync(query);
 		}
 
@@ -47,11 +68,14 @@ namespace SessionTableStorage.Library
 			}
 			catch
 			{
-				if (!defaultValue.Equals(default(T))) return defaultValue;
+				if (!defaultValue?.Equals(default(T)) ?? ReturnNullIfNotExists) return defaultValue;
 				throw;
 			}
 		}
 
+		/// <summary>
+		/// Use like Session.Abandon
+		/// </summary>		
 		public async Task ClearAsync()
 		{
 			var table = GetTable();
@@ -87,5 +111,77 @@ namespace SessionTableStorage.Library
 
 			return result;
 		}
+		#endregion
+
+
+		#region sync
+		//session access is all synchronous, so that's why I have sync versions of the async methods
+
+		public TableResult QueryTable(string rowKey)
+		{
+			var query = GetQueryOperation(rowKey);
+			var table = GetTable();
+			return table.Execute(query);
+		}
+
+		public T Get<T>(string rowKey, T defaultValue = default(T))
+		{
+			try
+			{
+				var result = QueryTable(rowKey);
+				string json = ((StorageEntity)result.Result).Json;
+				return JsonConvert.DeserializeObject<T>(json);
+			}
+			catch
+			{
+				if (!defaultValue?.Equals(default(T)) ?? ReturnNullIfNotExists) return defaultValue;
+				throw;
+			}
+		}
+
+		public void Set(string rowKey, object data)
+		{
+			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data);
+			var table = GetTable();
+			table.Execute(insertOrReplace);
+		}
+
+		public void Clear()
+		{
+			var table = GetTable();
+			var entities = GetAllEntities(table);
+			foreach (var e in entities)
+			{
+				var delete = TableOperation.Delete(e);
+				table.Execute(delete);
+			}
+		}
+
+		public IEnumerable<StorageEntity> GetAllEntities()
+		{
+			var table = GetTable();
+			return GetAllEntities(table);
+		}
+
+		private IEnumerable<StorageEntity> GetAllEntities(CloudTable table)
+		{
+			List<StorageEntity> result = new List<StorageEntity>();
+
+			// thanks to https://stackoverflow.com/a/48227035/2023653
+			var criteria = TableQuery.GenerateFilterCondition(nameof(StorageEntity.PartitionKey), QueryComparisons.Equal, _partitionKey);
+			var query = new TableQuery<StorageEntity>().Where(criteria);
+			TableContinuationToken continuationToken = null;
+			do
+			{
+				var results = table.ExecuteQuerySegmented(query, continuationToken);
+				foreach (var item in results) result.Add(item);
+				continuationToken = results.ContinuationToken;
+			}
+			while (continuationToken != null);
+
+			return result;
+		}
+
+		#endregion
 	}
 }

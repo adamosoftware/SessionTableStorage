@@ -9,6 +9,8 @@ namespace Tests
 		{
 		}
 
+		protected override bool ReturnNullIfNotExists => true;
+
 		protected override CloudTable GetTable()
 		{
 			return CloudTableHelper.GetTable();
