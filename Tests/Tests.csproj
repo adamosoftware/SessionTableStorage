@@ -73,11 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheableTests.cs" />
+    <Compile Include="MyCacheableStorage.cs" />
+    <Compile Include="TimedCacheableTests.cs" />
     <Compile Include="CloudTableHelper.cs" />
     <Compile Include="Models\GithubActivityFlattened.cs" />
     <Compile Include="Models\GithubActivityView.cs" />
     <Compile Include="Models\SampleType.cs" />
-    <Compile Include="MyCacheableStorage.cs" />
+    <Compile Include="MyTimedCacheableStorage.cs" />
     <Compile Include="MySession.cs" />
     <Compile Include="BaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

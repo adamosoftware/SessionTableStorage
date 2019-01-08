@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheableStorage.cs" />
+    <Compile Include="Enums\RetrievedFrom.cs" />
     <Compile Include="Interfaces\ICacheable.cs" />
     <Compile Include="TimedCacheableStorage.cs" />
     <Compile Include="Interfaces\ITimedCacheable.cs" />

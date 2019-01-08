@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SessionTableStorage.Library.Enums;
+using System;
 
 namespace SessionTableStorage.Library.Interfaces
 {
@@ -16,5 +17,11 @@ namespace SessionTableStorage.Library.Interfaces
 		/// Data is considered stale after this number of minutes
 		/// </summary>		
 		int MaxLifetimeMinutes { get; }
+
+		/// <summary>
+		/// Indicates how the object was retried, live or from cache.
+		/// ORMs should not map this
+		/// </summary>
+		RetrievedFrom RetrievedFrom { get; set; }
 	}
 }

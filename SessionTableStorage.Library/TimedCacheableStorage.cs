@@ -1,4 +1,5 @@
-﻿using SessionTableStorage.Library.Interfaces;
+﻿using SessionTableStorage.Library.Enums;
+using SessionTableStorage.Library.Interfaces;
 using System;
 using System.Threading.Tasks;
 
@@ -13,6 +14,19 @@ namespace SessionTableStorage.Library
 		{
 		}
 
+		#region hide base methods
+		// these methods don't use the proper cache logic, so they should not be used
+
+		public new async Task SetAsync(string rowKey, object data)
+		{
+			throw new InvalidOperationException("To guarantee correct cache update, please use the overload that accepts a generic T argument.");
+		}
+
+		public new void Set(string rowKey, object data)
+		{
+			throw new InvalidOperationException("To guarantee correct cache update, please use the overload that accepts a generic T argument.");
+		}
+
 		public new async Task<T> GetAsync<T>(string rowKey, T defaultValue = default(T))
 		{
 			throw new InvalidOperationException("To guarantee data freshness, please use the overload that accepts a Func<Task<T>>");
@@ -22,6 +36,7 @@ namespace SessionTableStorage.Library
 		{
 			throw new InvalidOperationException("To guarantee data freshness, please use the overload that accepts a Func<T>");
 		}
+		#endregion
 
 		public async Task<T> GetAsync<T>(string rowKey, Func<Task<T>> update, T defaultValue = default(T)) where T : ITimedCacheable
 		{
@@ -31,12 +46,14 @@ namespace SessionTableStorage.Library
 
 			if (IsValid(result))
 			{
+				result.RetrievedFrom = RetrievedFrom.Cache;
 				return result;
 			}
 			else
 			{
-				result = await update.Invoke();
+				result = await update.Invoke();				
 				await SetAsync(rowKey, result);
+				result.RetrievedFrom = RetrievedFrom.Live;
 			}			
 
 			return result;
@@ -49,12 +66,14 @@ namespace SessionTableStorage.Library
 			result = base.Get<T>(rowKey, defaultValue);
 			if (IsValid(result))
 			{
+				result.RetrievedFrom = RetrievedFrom.Cache;
 				return result;
 			}
 			else
 			{
-				result = update.Invoke();
+				result = update.Invoke();				
 				Set(rowKey, result);
+				result.RetrievedFrom = RetrievedFrom.Live;
 			}
 	
 			return result;
@@ -74,6 +93,7 @@ namespace SessionTableStorage.Library
 
 		private static bool IsValid<T>(T result) where T : ITimedCacheable
 		{
+			if (result == null) return false;
 			return DateTime.UtcNow.Subtract(result.LastUpdate).TotalMinutes < result.MaxLifetimeMinutes;
 		}
 	}

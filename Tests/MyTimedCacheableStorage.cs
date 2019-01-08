@@ -1,14 +1,11 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using SessionTableStorage.Library;
+using System;
 
 namespace Tests
 {
-	public class MyCacheableStorage : CacheableStorage
+	public class MyTimedCacheableStorage : TimedCacheableStorage
 	{
-		public MyCacheableStorage() : base("app-cacheable")
-		{
-		}
-
 		protected override CloudTable GetTable()
 		{
 			return CloudTableHelper.GetTable();

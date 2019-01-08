@@ -1,9 +1,11 @@
-﻿using System;
+﻿using SessionTableStorage.Library.Enums;
+using SessionTableStorage.Library.Interfaces;
+using System;
 using System.Linq;
 
 namespace Tests.Models
 {
-	public class SampleType
+	public class SampleType : ICacheable
 	{
 		public string OrderId { get; set; }
 		public string Description { get; set; }
@@ -31,6 +33,9 @@ namespace Tests.Models
 		{
 			return base.GetHashCode();
 		}
+
+		public bool IsValid { get; set; }
+		public RetrievedFrom RetrievedFrom { get; set; }		
 	}
 
 	public class NestedType
