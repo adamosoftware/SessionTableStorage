@@ -8,9 +8,7 @@ namespace Tests
 		public MySession(string partitionKey) : base(partitionKey)
 		{
 		}
-
-		protected override bool ReturnNullIfNotExists => true;
-
+		
 		protected override CloudTable GetTable()
 		{
 			return CloudTableHelper.GetTable();

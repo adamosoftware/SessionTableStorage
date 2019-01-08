@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,16 +10,12 @@ namespace SessionTableStorage.Library
 	{
 		protected abstract CloudTable GetTable();
 
-		/// <summary>
-		/// Set this to true in your derived class to
-		/// prevent exception from being thrown if entries don't exist
-		/// </summary>
-		protected abstract bool ReturnNullIfNotExists { get; }
-
 		private readonly string _partitionKey;
 
 		public SessionStorageBase(string partitionKey)
 		{
+			if (string.IsNullOrWhiteSpace(partitionKey)) throw new ArgumentException("Can't use null or whitespace partition key with SessionStorageBase");
+
 			_partitionKey = partitionKey;
 		}
 
@@ -55,8 +52,7 @@ namespace SessionTableStorage.Library
 		}
 
 		/// <summary>
-		/// Queries the cloud table and returns the T-typed data.
-		/// If exception occurs and defaultValue is set, then defaultValue is returned instead
+		/// Queries the cloud table and returns the T-typed data.		
 		/// </summary>
 		public async Task<T> GetAsync<T>(string rowKey, T defaultValue = default(T))
 		{
@@ -68,8 +64,7 @@ namespace SessionTableStorage.Library
 			}
 			catch
 			{
-				if (!defaultValue?.Equals(default(T)) ?? ReturnNullIfNotExists) return defaultValue;
-				throw;
+				return defaultValue;
 			}
 		}
 
@@ -134,8 +129,7 @@ namespace SessionTableStorage.Library
 			}
 			catch
 			{
-				if (!defaultValue?.Equals(default(T)) ?? ReturnNullIfNotExists) return defaultValue;
-				throw;
+				return defaultValue;
 			}
 		}
 

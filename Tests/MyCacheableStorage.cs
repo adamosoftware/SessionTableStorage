@@ -4,10 +4,8 @@ using System;
 
 namespace Tests
 {
-	public class MyCacheableStorage : CacheableStorageBase
+	public class MyCacheableStorage : TimedCacheableStorage
 	{
-		protected override bool ReturnNullIfNotExists => true;
-
 		protected override CloudTable GetTable()
 		{
 			return CloudTableHelper.GetTable();
