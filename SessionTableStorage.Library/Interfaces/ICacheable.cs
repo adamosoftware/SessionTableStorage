@@ -2,6 +2,9 @@
 
 namespace SessionTableStorage.Library.Interfaces
 {
+	/// <summary>
+	/// Implement this on classes that can persist in Azure Table Storage indefinitely until they're deleted or marked invalid
+	/// </summary>
 	public interface ICacheable
 	{
 		/// <summary>
