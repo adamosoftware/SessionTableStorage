@@ -22,7 +22,7 @@ The reason I didn't go for Cosmos DB is because I'm cost-conscious, and I wanted
 
 - Check out the [integration tests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/BaseTests.cs) to see common usage examples.
 
-## CacheableStorageBase
+## TimedCacheableStorageBase
 
 A requirement I have in another project turned out to be decent fit for this project. On my personal site [aosoftware.net](https://aosoftware.net/), I use GitHub's API to fill the "What I'm Working On" section -- it shows a summary of my activity over the last several days. GitHub API calls are limited to a certain maximum per hour or something. I don't remember what the limit is, but I don't want to hit that limit by calling their API with every page view of my site. Not that I get a lot of traffic in the first place, but I felt this was a good candidate for caching API call results for 15 minutes at a time. That way, no matter how often my home page is refreshed, it will call the GitHub API once every 15 minutes at most.
 
