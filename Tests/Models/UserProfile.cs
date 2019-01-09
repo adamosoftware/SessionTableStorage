@@ -22,10 +22,5 @@ namespace Tests.Models
 
 		[JsonIgnore]
 		public RetrievedFrom RetrievedFrom { get; set; }
-
-		public void Invalidate()
-		{			
-			new MyCacheableStorage().Invalidate<UserProfile>(UserName);
-		}
 	}
 }

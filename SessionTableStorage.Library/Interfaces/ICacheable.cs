@@ -19,10 +19,5 @@ namespace SessionTableStorage.Library.Interfaces
 		/// ORMs should not map this, and should also never be serialized (use [JsonIgnore])
 		/// </summary>
 		RetrievedFrom RetrievedFrom { get; set; }
-
-		/// <summary>
-		/// Use this to delete or mark a cached object as invalid
-		/// </summary>
-		void Invalidate();
 	}
 }

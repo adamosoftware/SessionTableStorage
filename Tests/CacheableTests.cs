@@ -59,9 +59,8 @@ namespace Tests
 			profile.TimeZoneOffset = 6;
 			profile.PhoneNumber = "111-232-3438";
 
-			// in a real app, you would save the updated profile (for example with Postulate Save),
-			// and the Save would call Invalidate()
-			profile.Invalidate();
+			// in a real app, you would save the updated profile (for example with Postulate Save)			
+			_storage.Invalidate<UserProfile>(currentUser);			
 
 			// simulates a new page request
 			profile = _storage.Get(currentUser, () => profile);
