@@ -16,9 +16,9 @@ The reason I didn't go for Cosmos DB is because I'm cost-conscious, and I wanted
 
 - Instantiate your `SessionStorageBase`-based class, passing a partition key that makes sense in your application. This could be a user name, ASP.NET SessionId or whatever makes sense in your application.
 
-- Use the [GetAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L41) and [SetAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L20) methods to load and save data you want to persist, respectively. These methods use Json.NET serialization under the hood to let you store aribitrary data in any type that Json.NET can handle.
+- Use the [GetAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L57) and [SetAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L37) methods to load and save data you want to persist, respectively. These methods use Json.NET serialization under the hood to let you store aribitrary data in any type that Json.NET can handle.
 
-- Use the [ClearAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L56) method to delete all the values within a partition key. This is effectively the same as abandoning a session in ASP.NET.
+- Use the [ClearAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs#L85) method to delete all the values within a partition key. This is effectively the same as abandoning a session in ASP.NET.
 
 - Check out the [integration tests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/BaseTests.cs) to see common usage examples.
 
