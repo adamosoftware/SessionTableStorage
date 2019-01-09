@@ -11,7 +11,7 @@ namespace SessionTableStorage.Library.Interfaces
 		bool IsValid { get; set; }
 
 		/// <summary>
-		/// Indicates how the object was retried, live or from cache.
+		/// Indicates how the object was retrieved, live or from cache.
 		/// ORMs should not map this
 		/// </summary>
 		RetrievedFrom RetrievedFrom { get; set; }
