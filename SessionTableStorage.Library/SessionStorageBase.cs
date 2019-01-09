@@ -68,6 +68,17 @@ namespace SessionTableStorage.Library
 			}
 		}
 
+		public async Task DeleteAsync(string rowKey)
+		{
+			var table = GetTable();
+			var result = await QueryTableAsync(rowKey);
+			if (result?.Result != null)
+			{				
+				var delete = TableOperation.Delete((StorageEntity)result.Result);
+				await table.ExecuteAsync(delete);
+			}
+		}
+
 		/// <summary>
 		/// Use like Session.Abandon
 		/// </summary>		
@@ -108,7 +119,6 @@ namespace SessionTableStorage.Library
 		}
 		#endregion
 
-
 		#region sync
 		//session access is all synchronous, so that's why I have sync versions of the async methods
 
@@ -138,6 +148,17 @@ namespace SessionTableStorage.Library
 			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data, serializer);
 			var table = GetTable();
 			table.Execute(insertOrReplace);
+		}
+
+		public void Delete(string rowKey)
+		{
+			var table = GetTable();
+			var result = QueryTable(rowKey);
+			if (result?.Result != null)
+			{
+				var delete = TableOperation.Delete((StorageEntity)result.Result);
+				table.Execute(delete);
+			}
 		}
 
 		public void Clear()

@@ -99,5 +99,29 @@ namespace Tests
 			var getSample = _session.Get<SampleType>(rowKey);
 			Assert.AreEqual(sample, getSample);
 		}
+
+		[TestMethod]
+		public void DeleteShouldWork()
+		{
+			const string deleteTest = "deleteTest";
+
+			_session.Set(deleteTest, GetSampleComplexType());
+			_session.Delete(deleteTest);
+
+			var test = _session.Get<SampleType>(deleteTest);
+			Assert.IsTrue(test == null);
+		}
+
+		[TestMethod]
+		public void DeleteAsyncShouldWork()
+		{
+			const string deleteTest = "deleteTest";
+
+			_session.SetAsync(deleteTest, GetSampleComplexType()).Wait();
+			_session.DeleteAsync(deleteTest).Wait();
+
+			var test = _session.GetAsync<SampleType>(deleteTest).Result;
+			Assert.IsTrue(test == null);
+		}
 	}
 }
