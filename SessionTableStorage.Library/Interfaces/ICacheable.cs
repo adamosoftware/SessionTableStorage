@@ -16,7 +16,7 @@ namespace SessionTableStorage.Library.Interfaces
 
 		/// <summary>
 		/// Indicates how the object was retrieved, live or from cache.
-		/// ORMs should not map this, and [JsonIgnore] should also be used
+		/// ORMs should not map this, and should also never be serialized (use [JsonIgnore])
 		/// </summary>
 		RetrievedFrom RetrievedFrom { get; set; }
 
