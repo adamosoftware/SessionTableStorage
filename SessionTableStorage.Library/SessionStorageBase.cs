@@ -19,9 +19,9 @@ namespace SessionTableStorage.Library
 			_partitionKey = partitionKey;
 		}
 
-		private TableOperation GetInsertOrReplaceOperation(string rowKey, object data)
+		private TableOperation GetInsertOrReplaceOperation(string rowKey, object data, Func<object, string> serializer = null)
 		{
-			return TableOperation.InsertOrReplace(new StorageEntity(_partitionKey, rowKey, data));
+			return TableOperation.InsertOrReplace(new StorageEntity(_partitionKey, rowKey, data, serializer));
 		}
 
 		private TableOperation GetQueryOperation(string rowKey)
@@ -34,12 +34,12 @@ namespace SessionTableStorage.Library
 		/// <summary>
 		/// Inserts/replaces the rowKey data
 		/// </summary>
-		public async Task SetAsync(string rowKey, object data)
+		public async Task SetAsync(string rowKey, object data, Func<object, string> serializer = null)
 		{
-			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data);
+			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data, serializer);
 			var table = GetTable();
 			await table.ExecuteAsync(insertOrReplace);
-		}
+		}		
 
 		/// <summary>
 		/// Queries the cloud table and returns the TableResult object
@@ -133,9 +133,9 @@ namespace SessionTableStorage.Library
 			}
 		}
 
-		public void Set(string rowKey, object data)
+		public void Set(string rowKey, object data, Func<object, string> serializer = null)
 		{
-			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data);
+			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data, serializer);
 			var table = GetTable();
 			table.Execute(insertOrReplace);
 		}

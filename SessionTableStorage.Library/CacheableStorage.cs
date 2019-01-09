@@ -51,10 +51,10 @@ namespace SessionTableStorage.Library
 			return result;
 		}
 
-		public async Task SetAsync<T>(string rowKey, T data) where T : ICacheable
+		public async Task SetAsync<T>(string rowKey, T data, Func<object, string> serizlizer = null) where T : ICacheable
 		{
 			data.IsValid = true;
-			await base.SetAsync(rowKey, data);
+			await base.SetAsync(rowKey, data, serizlizer);
 		}
 
 		public async Task InvalidateAsync<T>(string rowKey) where T : ICacheable
@@ -91,10 +91,10 @@ namespace SessionTableStorage.Library
 			return result;
 		}
 
-		public void Set<T>(string rowKey, T data) where T : ICacheable
+		public void Set<T>(string rowKey, T data, Func<object, string> serializer = null) where T : ICacheable
 		{
 			data.IsValid = true;
-			base.Set(rowKey, data);
+			base.Set(rowKey, data, serializer);
 		}
 	}
 }

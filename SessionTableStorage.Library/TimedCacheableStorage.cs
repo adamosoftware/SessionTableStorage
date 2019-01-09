@@ -79,16 +79,16 @@ namespace SessionTableStorage.Library
 			return result;
 		}
 
-		public async Task SetAsync<T>(string rowKey, T data) where T : ITimedCacheable
+		public async Task SetAsync<T>(string rowKey, T data, Func<object, string> serializer = null) where T : ITimedCacheable
 		{
 			data.LastUpdate = DateTime.UtcNow;
-			await base.SetAsync(rowKey, data);
+			await base.SetAsync(rowKey, data, serializer);
 		}
 
-		public void Set<T>(string rowKey, T data) where T : ITimedCacheable
+		public void Set<T>(string rowKey, T data, Func<object, string> serializer = null) where T : ITimedCacheable
 		{
 			data.LastUpdate = DateTime.UtcNow;
-			base.Set(rowKey, data);
+			base.Set(rowKey, data, serializer);
 		}
 
 		private static bool IsValid<T>(T result) where T : ITimedCacheable

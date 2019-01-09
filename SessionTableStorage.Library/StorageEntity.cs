@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
+using System;
 
 namespace SessionTableStorage.Library
 {
@@ -10,13 +11,13 @@ namespace SessionTableStorage.Library
 	{
 		public StorageEntity()
 		{
-		}
+		}		
 
-		public StorageEntity(string partitionKey, string rowKey, object data)
+		public StorageEntity(string partitionKey, string rowKey, object data, Func<object, string> serializer = null)
 		{
 			PartitionKey = partitionKey;
 			RowKey = rowKey;
-			Json = JsonConvert.SerializeObject(data);
+			Json = serializer?.Invoke(data) ?? JsonConvert.SerializeObject(data);
 		}
 
 		public string Json { get; set; }
