@@ -36,7 +36,7 @@ Time-based cache invalidation is one thing, but I think a more general-purpose r
 
 For this use case, I added [CacheableStorage](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/CacheableStorage.cs) which combines Azure Table Storage access with checks to see if the data is valid, and queries it live if not. This requires storage objects to implement [ICacheable](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/Interfaces/ICacheable.cs). This comes together in the [CacheableStorage.GetAsync](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/CacheableStorage.cs#L38) method, which queries table storage for an object, and if it's marked as invalid, it's queried live.
 
-Please see [CacheableTests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/CacheableTests.cs) to see sample uses of this.
+Please see [CacheableTests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/CacheableTests.cs) to see sample uses of this. I added a hypothetical user profile class [here](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/Models/UserProfile.cs) that resembles how I would use this in a real app.
 
 
 
