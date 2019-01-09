@@ -17,6 +17,7 @@ namespace Tests.Models
 		public int TimeZoneOffset { get; set; }
 		public long Permissions { get; set; }
 		
+		// in a real app, I would add [NotMapped] so that my ORM would ignore it
 		public bool IsValid { get; set; }
 
 		[JsonIgnore]
