@@ -18,5 +18,10 @@ namespace SessionTableStorage.Library.Interfaces
 		/// ORMs should not map this
 		/// </summary>
 		RetrievedFrom RetrievedFrom { get; set; }
+
+		/// <summary>
+		/// Use this to delete or mark a cached object as invalid
+		/// </summary>
+		void Invalidate();
 	}
 }
