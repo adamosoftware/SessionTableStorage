@@ -38,6 +38,6 @@ For this use case, I added [CacheableStorage](https://github.com/adamosoftware/S
 
 Please see [CacheableTests](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/CacheableTests.cs) to see sample uses of this. I added a hypothetical user profile class [here](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/Models/UserProfile.cs) that resembles how I would use this in a real app.
 
-For a more realistic example, see my [MvcSpace project](https://github.com/adamosoftware/MvcSpace/blob/master/MvcSpace.App/BaseController.cs#L34) where it loads user profile info from table storage ("cache") or the database based on the validity of the cache data. The work is done [here](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/CacheableStorage.cs#L78).
+For a more realistic example, see my [MvcSpace project](https://github.com/adamosoftware/MvcSpace/blob/master/MvcSpace.App/BaseController.cs#L36) where it loads user profile info from table storage ("cache") or the database based on the validity of the cache data. The work is done [here](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/CacheableStorage.cs#L78).
 
 
