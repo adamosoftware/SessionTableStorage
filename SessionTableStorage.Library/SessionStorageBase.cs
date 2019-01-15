@@ -10,23 +10,23 @@ namespace SessionTableStorage.Library
 	{
 		protected abstract CloudTable GetTable();
 
-		private readonly string _partitionKey;
-
 		public SessionStorageBase(string partitionKey)
 		{
 			if (string.IsNullOrWhiteSpace(partitionKey)) throw new ArgumentException("Can't use null or whitespace partition key with SessionStorageBase");
 
-			_partitionKey = partitionKey;
+			PartitionKey = partitionKey;
 		}
+
+		public string PartitionKey { get; }
 
 		private TableOperation GetInsertOrReplaceOperation(string rowKey, object data, Func<object, string> serializer = null)
 		{
-			return TableOperation.InsertOrReplace(new StorageEntity(_partitionKey, rowKey, data, serializer));
+			return TableOperation.InsertOrReplace(new StorageEntity(PartitionKey, rowKey, data, serializer));
 		}
 
 		private TableOperation GetQueryOperation(string rowKey)
 		{
-			return TableOperation.Retrieve<StorageEntity>(_partitionKey, rowKey);
+			return TableOperation.Retrieve<StorageEntity>(PartitionKey, rowKey);
 		}
 
 		#region async
@@ -93,7 +93,7 @@ namespace SessionTableStorage.Library
 			List<StorageEntity> result = new List<StorageEntity>();
 
 			// thanks to https://stackoverflow.com/a/48227035/2023653
-			var criteria = TableQuery.GenerateFilterCondition(nameof(StorageEntity.PartitionKey), QueryComparisons.Equal, _partitionKey);
+			var criteria = TableQuery.GenerateFilterCondition(nameof(StorageEntity.PartitionKey), QueryComparisons.Equal, PartitionKey);
 			var query = new TableQuery<StorageEntity>().Where(criteria);
 			TableContinuationToken continuationToken = null;
 			do
@@ -162,7 +162,7 @@ namespace SessionTableStorage.Library
 			List<StorageEntity> result = new List<StorageEntity>();
 
 			// thanks to https://stackoverflow.com/a/48227035/2023653
-			var criteria = TableQuery.GenerateFilterCondition(nameof(StorageEntity.PartitionKey), QueryComparisons.Equal, _partitionKey);
+			var criteria = TableQuery.GenerateFilterCondition(nameof(StorageEntity.PartitionKey), QueryComparisons.Equal, PartitionKey);
 			var query = new TableQuery<StorageEntity>().Where(criteria);
 			TableContinuationToken continuationToken = null;
 			do
