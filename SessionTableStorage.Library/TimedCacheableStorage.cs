@@ -17,12 +17,12 @@ namespace SessionTableStorage.Library
 		#region hide base methods
 		// these methods don't use the proper cache logic, so they should not be used
 
-		public new async Task SetAsync(string rowKey, object data)
+		public new async Task SetAsync(string rowKey, object data, Func<object, string> serializer = null)
 		{
 			throw new InvalidOperationException("To guarantee correct cache update, please use the overload that accepts a generic T argument.");
 		}
 
-		public new void Set(string rowKey, object data)
+		public new void Set(string rowKey, object data, Func<object, string> serializer = null)
 		{
 			throw new InvalidOperationException("To guarantee correct cache update, please use the overload that accepts a generic T argument.");
 		}

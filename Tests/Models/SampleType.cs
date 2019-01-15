@@ -34,6 +34,11 @@ namespace Tests.Models
 			return base.GetHashCode();
 		}
 
+		public void Invalidate()
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool IsValid { get; set; }
 		public RetrievedFrom RetrievedFrom { get; set; }		
 	}

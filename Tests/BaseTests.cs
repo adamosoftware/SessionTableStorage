@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using Tests.Models;
@@ -26,8 +27,18 @@ namespace Tests
 		public void SaveComplexType()
 		{
 			const string rowKey = "complexType";
+			SampleType sample = GetSampleComplexType();
 
-			var sample = new SampleType()
+			_session.SetAsync(rowKey, sample).Wait();
+
+			var getSample = _session.GetAsync<SampleType>(rowKey).Result;
+
+			Assert.AreEqual(sample, getSample);
+		}
+
+		private static SampleType GetSampleComplexType()
+		{
+			return new SampleType()
 			{
 				OrderId = "KF34223",
 				Description = "whatever is this description",
@@ -40,12 +51,6 @@ namespace Tests
 					new NestedType() { ItemName = "prelcen", Quantity = 3.2m, UnitPrice = 34.9m }
 				}
 			};
-
-			_session.SetAsync(rowKey, sample).Wait();
-
-			var getSample = _session.GetAsync<SampleType>(rowKey).Result;
-
-			Assert.AreEqual(sample, getSample);
 		}
 
 		[TestMethod]
@@ -77,6 +82,46 @@ namespace Tests
 			_session.SetAsync("date", DateTime.Now).Wait();
 			_session.ClearAsync().Wait();
 			Assert.IsTrue(!_session.GetAllEntitiesAsync().Result.Any());
+		}
+
+		[TestMethod]
+		public void SaveComplexTypeWithCustomSerializer()
+		{
+			const string rowKey = "indented";
+
+			var sample = GetSampleComplexType();
+			_session.Set(rowKey, sample, (obj) => JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
+			{
+				Formatting = Formatting.Indented,
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			}));
+
+			var getSample = _session.Get<SampleType>(rowKey);
+			Assert.AreEqual(sample, getSample);
+		}
+
+		[TestMethod]
+		public void DeleteShouldWork()
+		{
+			const string deleteTest = "deleteTest";
+
+			_session.Set(deleteTest, GetSampleComplexType());
+			_session.Delete(deleteTest);
+
+			var test = _session.Get<SampleType>(deleteTest);
+			Assert.IsTrue(test == null);
+		}
+
+		[TestMethod]
+		public void DeleteAsyncShouldWork()
+		{
+			const string deleteTest = "deleteTest";
+
+			_session.SetAsync(deleteTest, GetSampleComplexType()).Wait();
+			_session.DeleteAsync(deleteTest).Wait();
+
+			var test = _session.GetAsync<SampleType>(deleteTest).Result;
+			Assert.IsTrue(test == null);
 		}
 	}
 }

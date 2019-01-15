@@ -14,14 +14,14 @@ namespace SessionTableStorage.Library
 		#region hide base methods
 		// these methods don't use the proper cache logic, so they should not be used
 
-		public new async Task SetAsync(string rowKey, object data)
+		public new async Task SetAsync(string rowKey, object data, Func<object, string> serializer = null)
 		{
-			throw new InvalidOperationException("To guarantee correct cache update, please use the overload that accepts a generic T argument.");
+			throw new InvalidOperationException("To guarantee correct cache update, please use the GetAsync overload that accepts a generic T argument.");
 		}
 
-		public new void Set(string rowKey, object data)
+		public new void Set(string rowKey, object data, Func<object, string> serializer = null)
 		{
-			throw new InvalidOperationException("To guarantee correct cache update, please use the overload that accepts a generic T argument.");
+			throw new InvalidOperationException("To guarantee correct cache update, please use the Get overload that accepts a generic T argument.");
 		}
 
 		public new async Task<T> GetAsync<T>(string rowKey, T defaultValue = default(T))
@@ -38,7 +38,7 @@ namespace SessionTableStorage.Library
 		public async Task<T> GetAsync<T>(string rowKey, Func<Task<T>> query, T defaultValue = default(T)) where T : ICacheable
 		{
 			T result = await GetAsync(rowKey, defaultValue);
-			if (result.IsValid)
+			if (result?.IsValid ?? false)
 			{
 				result.RetrievedFrom = RetrievedFrom.Cache;
 				return result;
@@ -59,7 +59,7 @@ namespace SessionTableStorage.Library
 
 		public async Task InvalidateAsync<T>(string rowKey) where T : ICacheable
 		{
-			T result = await GetAsync<T>(rowKey);
+			T result = await base.GetAsync<T>(rowKey);
 			if (result.Equals(default(T))) return;
 
 			result.IsValid = false;
@@ -68,7 +68,7 @@ namespace SessionTableStorage.Library
 
 		public void Invalidate<T>(string rowKey) where T : ICacheable
 		{
-			T result = Get<T>(rowKey);
+			T result = base.Get<T>(rowKey);
 			if (result.Equals(default(T))) return;
 
 			result.IsValid = false;
@@ -77,8 +77,8 @@ namespace SessionTableStorage.Library
 
 		public T Get<T>(string rowKey, Func<T> query, T defaultValue = default(T)) where T : ICacheable
 		{
-			T result = Get(rowKey, defaultValue);
-			if (result.IsValid)
+			T result = base.Get(rowKey, defaultValue);
+			if (result?.IsValid ?? false)
 			{
 				result.RetrievedFrom = RetrievedFrom.Cache;
 				return result;
