@@ -25,7 +25,7 @@ namespace Tests
 			const string currentUser = "adamo";
 
 			// manually add something to cache
-			_storage.SetAsync(currentUser, GetSampleProfile(currentUser)).Wait();
+			_storage.SetAsync(currentUser, GetSampleProfile(currentUser).Result).Wait();
 
 			// access the cached item as you would in a real app
 			var profile = _storage.GetAsync(currentUser, () => GetSampleProfile(currentUser)).Result;
@@ -64,15 +64,14 @@ namespace Tests
 			_storage.InvalidateAsync<UserProfile>(currentUser).Wait();			
 
 			// simulates a new page request
-			profile = _storage.GetAsync<UserProfile>(currentUser, () => profile).Result;
+			profile = _storage.GetAsync(currentUser, () => GetSampleProfile(currentUser)).Result;
 
 			Assert.IsTrue(profile.RetrievedFrom == RetrievedFrom.Live);
 		}
 
 		private async static Task<UserProfile> GetSampleProfile(string userName)
 		{
-			// in a real app, this would be a database query based on User.Identity.Name
-			return new UserProfile()
+			var result = new UserProfile()
 			{
 				UserName = userName,
 				Email = "adamosoftware@gmail.com",
@@ -80,6 +79,9 @@ namespace Tests
 				Permissions = 3423,
 				PhoneNumber = "234-323-4899"
 			};
+
+			// in a real app, this would be a database query based on User.Identity.Name
+			return await Task.FromResult(result);					
 		}
 	}
 }
