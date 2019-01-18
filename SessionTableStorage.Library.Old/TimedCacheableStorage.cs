@@ -59,10 +59,36 @@ namespace SessionTableStorage.Library
 			return result;
 		}
 
+		public T Get<T>(string rowKey, Func<T> update, T defaultValue = default(T)) where T : ITimedCacheable
+		{
+			T result = default(T);
+
+			result = base.Get<T>(rowKey, defaultValue);
+			if (IsValid(result))
+			{
+				result.RetrievedFrom = RetrievedFrom.Cache;
+				return result;
+			}
+			else
+			{
+				result = update.Invoke();				
+				Set(rowKey, result);
+				result.RetrievedFrom = RetrievedFrom.Live;
+			}
+	
+			return result;
+		}
+
 		public async Task SetAsync<T>(string rowKey, T data, Func<object, string> serializer = null) where T : ITimedCacheable
 		{
 			data.LastUpdate = DateTime.UtcNow;
 			await base.SetAsync(rowKey, data, serializer);
+		}
+
+		public void Set<T>(string rowKey, T data, Func<object, string> serializer = null) where T : ITimedCacheable
+		{
+			data.LastUpdate = DateTime.UtcNow;
+			base.Set(rowKey, data, serializer);
 		}
 
 		private static bool IsValid<T>(T result) where T : ITimedCacheable

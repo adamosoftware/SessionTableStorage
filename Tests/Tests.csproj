@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SessionTableStorage.Library\SessionTableStorage.Library.csproj">
-      <Project>{60E795D6-8E9E-4B2A-A158-975741633F24}</Project>
+      <Project>{ac7684a6-f254-462c-8ab6-934b5b12f700}</Project>
       <Name>SessionTableStorage.Library</Name>
     </ProjectReference>
   </ItemGroup>

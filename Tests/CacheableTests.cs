@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SessionTableStorage.Library.Enums;
+using System.Threading.Tasks;
 using Tests.Models;
 
 namespace Tests
@@ -14,7 +15,7 @@ namespace Tests
 		{
 			// hypothetical current user
 			const string currentUser = "adamo";
-			var profile = _storage.Get(currentUser, () => GetSampleProfile(currentUser));
+			var profile = _storage.GetAsync(currentUser, () => GetSampleProfile(currentUser)).Result;
 			Assert.IsTrue(profile.UserName.Equals(currentUser));
 		}
 
@@ -24,10 +25,10 @@ namespace Tests
 			const string currentUser = "adamo";
 
 			// manually add something to cache
-			_storage.Set(currentUser, GetSampleProfile(currentUser));
+			_storage.SetAsync(currentUser, GetSampleProfile(currentUser)).Wait();
 
 			// access the cached item as you would in a real app
-			var profile = _storage.Get(currentUser, () => GetSampleProfile(currentUser));
+			var profile = _storage.GetAsync(currentUser, () => GetSampleProfile(currentUser)).Result;
 
 			// after manually pushing to cache, it should retrieve that way
 			Assert.IsTrue(profile.RetrievedFrom == RetrievedFrom.Cache);
@@ -39,10 +40,10 @@ namespace Tests
 			const string currentUser = "adamo";
 
 			// manually delete something from cache if present
-			_storage.Delete(currentUser);
+			_storage.DeleteAsync(currentUser).Wait();
 
 			// access the cached item as you would in a real app
-			var profile = _storage.Get(currentUser, () => GetSampleProfile(currentUser));
+			var profile = _storage.GetAsync(currentUser, () => GetSampleProfile(currentUser)).Result;
 
 			// after manually deleting from cache, it should retrieve live
 			Assert.IsTrue(profile.RetrievedFrom == RetrievedFrom.Live);
@@ -53,22 +54,22 @@ namespace Tests
 		{
 			const string currentUser = "adamo";
 
-			var profile = _storage.Get(currentUser, () => GetSampleProfile(currentUser));
+			var profile = _storage.GetAsync(currentUser, () => GetSampleProfile(currentUser)).Result;
 
 			// simulate a change that a user would make on a Profile manage page, for instance
 			profile.TimeZoneOffset = 6;
 			profile.PhoneNumber = "111-232-3438";
 
 			// in a real app, you would save the updated profile (for example with Postulate Save)			
-			_storage.Invalidate<UserProfile>(currentUser);			
+			_storage.InvalidateAsync<UserProfile>(currentUser).Wait();			
 
 			// simulates a new page request
-			profile = _storage.Get(currentUser, () => profile);
+			profile = _storage.GetAsync<UserProfile>(currentUser, () => profile).Result;
 
 			Assert.IsTrue(profile.RetrievedFrom == RetrievedFrom.Live);
 		}
 
-		private static UserProfile GetSampleProfile(string userName)
+		private async static Task<UserProfile> GetSampleProfile(string userName)
 		{
 			// in a real app, this would be a database query based on User.Identity.Name
 			return new UserProfile()

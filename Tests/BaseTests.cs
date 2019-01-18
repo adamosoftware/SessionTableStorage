@@ -90,13 +90,13 @@ namespace Tests
 			const string rowKey = "indented";
 
 			var sample = GetSampleComplexType();
-			_session.Set(rowKey, sample, (obj) => JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
+			_session.SetAsync(rowKey, sample, (obj) => JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
 			{
 				Formatting = Formatting.Indented,
 				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-			}));
+			})).Wait();
 
-			var getSample = _session.Get<SampleType>(rowKey);
+			var getSample = _session.GetAsync<SampleType>(rowKey).Result;
 			Assert.AreEqual(sample, getSample);
 		}
 
@@ -105,10 +105,10 @@ namespace Tests
 		{
 			const string deleteTest = "deleteTest";
 
-			_session.Set(deleteTest, GetSampleComplexType());
-			_session.Delete(deleteTest);
+			_session.SetAsync(deleteTest, GetSampleComplexType()).Wait();
+			_session.DeleteAsync(deleteTest).Wait();
 
-			var test = _session.Get<SampleType>(deleteTest);
+			var test = _session.GetAsync<SampleType>(deleteTest).Result;
 			Assert.IsTrue(test == null);
 		}
 
