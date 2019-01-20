@@ -8,7 +8,7 @@ namespace SessionTableStorage.Library
 {
 	public abstract class SessionStorageBase
 	{
-		protected abstract CloudTable GetTable();
+		protected abstract Task<CloudTable> GetTableAsync();
 
 		public SessionStorageBase(string partitionKey)
 		{
@@ -35,7 +35,7 @@ namespace SessionTableStorage.Library
 		public async Task SetAsync(string rowKey, object data, Func<object, string> serializer = null)
 		{
 			var insertOrReplace = GetInsertOrReplaceOperation(rowKey, data, serializer);
-			var table = GetTable();
+			var table = await GetTableAsync();
 			await table.ExecuteAsync(insertOrReplace);
 		}		
 
@@ -45,7 +45,7 @@ namespace SessionTableStorage.Library
 		public async Task<TableResult> QueryTableAsync(string rowKey)
 		{
 			TableOperation query = GetQueryOperation(rowKey);
-			var table = GetTable();
+			var table = await GetTableAsync();
 			return await table.ExecuteAsync(query);
 		}
 
@@ -68,7 +68,7 @@ namespace SessionTableStorage.Library
 
 		public async Task DeleteAsync(string rowKey)
 		{
-			var table = GetTable();
+			var table = await GetTableAsync();
 			var result = await QueryTableAsync(rowKey);
 			if (result?.Result != null)
 			{				
@@ -82,7 +82,7 @@ namespace SessionTableStorage.Library
 		/// </summary>		
 		public async Task ClearAsync()
 		{
-			var table = GetTable();
+			var table = await GetTableAsync();
 			var entities = await GetAllEntitiesAsync(table);
 			foreach (var e in entities)
 			{
@@ -93,7 +93,7 @@ namespace SessionTableStorage.Library
 
 		public async Task<IEnumerable<StorageEntity>> GetAllEntitiesAsync()
 		{
-			var table = GetTable();
+			var table = await GetTableAsync();
 			return await GetAllEntitiesAsync(table);
 		}
 

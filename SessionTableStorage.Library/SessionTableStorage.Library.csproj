@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <Authors>Adam O'Neil</Authors>
     <Description>An ASP.NET Session replacement backed by Azure Table Storage</Description>
     <Copyright>Copyright (c) Adam O'Neil 2018</Copyright>

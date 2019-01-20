@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using SessionTableStorage.Library;
+using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -9,9 +10,9 @@ namespace Tests
 		{
 		}
 		
-		protected override CloudTable GetTable()
+		protected override async Task<CloudTable> GetTableAsync()
 		{
-			return CloudTableHelper.GetTable();
+			return await CloudTableHelper.GetTableAsync();
 		}
 	}
 }
