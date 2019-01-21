@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SessionTableStorage.Library
 {
-	public abstract class CacheableStorage : SessionStorageBase
+	public abstract class CacheableStorage : SessionStorageBase, ICacheableStorage
 	{
 		public CacheableStorage(string partitionKey) : base(partitionKey)
 		{

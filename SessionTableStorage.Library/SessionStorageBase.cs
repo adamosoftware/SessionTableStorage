@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SessionTableStorage.Library
 {
-	public abstract class SessionStorageBase
+	public abstract class SessionStorageBase : ISessionStorageBase
 	{
 		protected abstract Task<CloudTable> GetTableAsync();
 

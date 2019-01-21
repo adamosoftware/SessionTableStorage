@@ -8,7 +8,7 @@ namespace SessionTableStorage.Library
 	/// <summary>
 	/// Use this to store data that can be cached for a fixed time before having to be queried again
 	/// </summary>
-	public abstract class TimedCacheableStorage : SessionStorageBase
+	public abstract class TimedCacheableStorage : SessionStorageBase, ITimedCacheableStorage
 	{
 		public TimedCacheableStorage(string partitionKey = "app-timed-cacheable") : base(partitionKey)
 		{
