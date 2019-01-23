@@ -10,7 +10,7 @@ The reason I didn't go for Cosmos DB is because I'm cost-conscious, and I wanted
 
 ## Quickstart
 
-- Install Nuget package **SessionTableStorage.Library**
+- Install Nuget package **SessionTableStorage.Library**. Note that package version [1.0.9](https://www.nuget.org/packages/SessionTableStorage.Library/1.0.9) targets .NET Standard 2.0. [1.0.3](https://www.nuget.org/packages/SessionTableStorage.Library/1.0.3) targets net461.
 
 - Create a class based on [SessionStorageBase](https://github.com/adamosoftware/SessionTableStorage/blob/master/SessionTableStorage.Library/SessionStorageBase.cs), and implement the `GetTable` method. See [this example](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/Classes/MySession.cs) from the Tests project. I like using an abstract base class so I don't have to make any assumptions about how a storage account is accessed. Note that I now use a [static helper method](https://github.com/adamosoftware/SessionTableStorage/blob/master/Tests/Classes/CloudTableHelper.cs) to get the storage table because I'm using the same table in two different test sets now. I'm also using my [DevSecrets](https://github.com/adamosoftware/DevSecrets) package to keep credentials out of source control.
 
